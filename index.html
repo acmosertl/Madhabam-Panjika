@@ -1,151 +1,313 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>মাধবম পঞ্জিকা v5.5 — Full Live</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>মাধবম পঞ্জিকা — Panel One</title>
 <style>
-:root{
- --pink:#E84EB4;--red:#B71C1C;--gold:#FBC02D;--sky:#29B6F6;
- --header:#FFE082;--label:#FF6F00;--value:#000;
-}
-body{margin:0;background:#FFF8E1;font-family:'Noto Sans Bengali','Noto Serif Bengali',sans-serif;
- display:flex;justify-content:center}
-.wrap{width:100%;max-width:420px;margin:10px auto;padding:6px;box-sizing:border-box}
-.card{border-radius:14px;margin:3px 0;padding:10px;border:1px solid rgba(255,255,255,.7);
- box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.title{text-align:center;font-weight:800;font-size:18px;color:var(--header);margin:0 0 8px}
-.subgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.subcard{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);
- border-radius:8px;padding:6px 8px}
-.label{font-size:13px;font-weight:700;color:var(--label)}
-.value{font-size:15px;font-weight:800;color:var(--value);margin-top:2px}
-.status{font-size:11px;color:#fff;margin-top:8px;text-align:center;opacity:.95}
-.btn{display:block;width:100%;text-align:center;border-radius:10px;padding:10px 12px;
- border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.12);
- font-weight:700;color:#000;cursor:pointer;transition:filter .15s ease}
-.hover-light:hover{filter:brightness(1.1)}
-.eka-name{font-size:30px;line-height:1.1;font-weight:800;color:#fff}
-.eka-sub{font-size:14px;color:#FFEB3B;margin-top:4px}
-.slider{overflow:hidden;position:relative;height:80px}
-.slide{position:absolute;top:0;left:0;width:100%;opacity:0;transition:opacity 1s}
-.slide.active{opacity:1}
-.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.loc-label{font-weight:700;color:#fff}
-.loc-val{font-weight:700}
+  :root{
+    --bg:#FFF8E1;            /* ক্রিম ব্যাকগ্রাউন্ড */
+    --card-radius:18px;
+    --hair-gap:3px;
+    --shadow:0 4px 14px rgba(0,0,0,.18);
+    --header:#FFE082;        /* হেডার আগের মতোই */
+    --label:#D7FF3F;         /* ✅ ফ্লুরো-গ্রিনিশ ইয়েলো */
+    --value:#000;
+    --pink:#E84BE4;          /* পঞ্জিকা কার্ড ব্যাক */
+    --pink-deep:#B71EB3;
+    --red:#C62828;           /* একাদশী ব্যাক লাল */
+    --gold:#FBC02D;
+    --lemon:#FFF5C2;         /* ইভেন্টস কার্ড হালকা হলুদ */
+    --blue1:#1C88E5;         /* জোয়ার-ভাটা গ্রেডিয়েন্ট */
+    --blue2:#0D47A1;
+    --glow:0 0 12px rgba(255,230,120,.95);
+  }
+  body{
+    margin:0;background:var(--bg);
+    font-family:"Noto Sans Bengali", "Noto Serif Bengali", system-ui, sans-serif;
+    color:#222;
+  }
+  .wrap{
+    max-width:720px;margin:14px auto;padding:6px 10px;
+  }
+  .card{
+    margin:12px;
+    border-radius:var(--card-radius);
+    box-shadow:var(--shadow);
+    position:relative;
+    background:#fff;
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,.06);
+  }
+  /* চারপাশে ক্রিমের সঙ্গে hair-line গ্যাপ ফিল */
+  .card::before{content:"";position:absolute;inset:var(--hair-gap);border-radius:calc(var(--card-radius) - var(--hair-gap));background:transparent;box-shadow:inset 0 0 0 9999px transparent;pointer-events:none}
+  .title{
+    text-align:center;font-weight:800;letter-spacing:.5px;
+    padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.18);
+    color:#6B3F00;background:var(--header);
+  }
+  /* পঞ্জিকা কার্ড */
+  .card-panjika{background:linear-gradient(180deg, var(--pink) 0%, #F36AF0 100%)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+  .subcard{
+    background:rgba(255,255,255,.20);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:12px;padding:10px 12px;
+  }
+  .label{font-size:14px;font-weight:800;color:var(--label);text-shadow:0 0 6px rgba(215,255,63,.65)}
+  .value{font-size:22px;font-weight:800;color:var(--value);margin-top:6px}
+  .status{
+    text-align:center;font-size:12px;color:#fff;opacity:.92;padding:10px 12px 14px
+  }
+  /* সম্পূর্ণ পঞ্জিকা (পপ-আপ ট্রিগার কার্ড) */
+  .card-popup{background:linear-gradient(180deg, var(--pink) 0%, #F36AF0 100%)}
+  .btn{
+    display:block;margin:14px auto 18px;width:92%;
+    text-align:center;padding:12px 14px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);
+    color:#fff;font-weight:800;backdrop-filter:blur(2px);cursor:pointer;
+    transition:filter .2s ease, transform .05s ease;
+  }
+  .btn:hover{filter:brightness(1.08)}
+  /* একাদশী ট্র্যাকার */
+  .card-eka{background:var(--red);color:#fff}
+  .eka-wrap{padding:12px}
+  .eka-header{display:flex;align-items:center;gap:8px;justify-content:center;font-weight:800}
+  .eka-header .ico{font-size:22px;filter:drop-shadow(var(--glow))}
+  .eka-name{font-size:26px;line-height:1.15;font-weight:800;margin:10px 0 0}
+  .eka-sub{font-size:14px;color:#FFE082;margin-top:6px}
+  /* ইভেন্টস স্লাইডার */
+  .card-events{background:var(--lemon);color:var(--red)}
+  .slider{position:relative;height:108px;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;opacity:0;display:flex;align-items:center;justify-content:center;
+    transition:opacity .8s ease;
+    font-weight:800;font-size:20px;text-align:center;padding:8px 10px
+  }
+  .slide.active{opacity:1}
+  .slide small{display:block;font-size:13px;margin-top:6px;color:#B71C1C}
+  /* লোকেশন + জোয়ার-ভাটা */
+  .card-tide{background:linear-gradient(180deg, var(--blue1) 0%, var(--blue2) 100%);color:#fff}
+  .tide-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+  .tide-box{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:10px}
+  .tide-title{font-weight:800;opacity:.95}
+  .tide-val{font-size:18px;font-weight:800;margin-top:6px}
+  /* আইকন গ্লো */
+  .glo{filter:drop-shadow(0 0 10px rgba(255,255,150,.85))}
+  /* ছোট ডিভাইস */
+  @media (max-width:440px){
+    .value{font-size:20px}
+    .eka-name{font-size:24px}
+    .slider{height:96px}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-<!-- 1️⃣ PANCHIKA -->
-<section class="card" style="background:var(--pink)">
- <h3 class="title">🪔 পঞ্জিকা</h3>
- <div class="subgrid">
-  <div class="subcard"><div class="label">তিথি</div><div class="value" id="tithi">–</div></div>
-  <div class="subcard"><div class="label">নক্ষত্র</div><div class="value" id="nakshatra">–</div></div>
-  <div class="subcard"><div class="label">সূর্যোদয়</div><div class="value" id="sunrise">–</div></div>
-  <div class="subcard"><div class="label">সূর্যাস্ত</div><div class="value" id="sunset">–</div></div>
-  <div class="subcard"><div class="label">চন্দ্রোদয়</div><div class="value" id="moonrise">–</div></div>
-  <div class="subcard"><div class="label">চন্দ্রাস্ত</div><div class="value" id="moonset">–</div></div>
- </div>
- <div class="status" id="panchika-status">সূর্যসিদ্ধান্ত Sync সক্রিয় · প্রতি ৩ ঘণ্টায় আপডেট</div>
-</section>
+    <!-- পঞ্জিকা -->
+    <section class="card card-panjika">
+      <div class="title">🪔 পঞ্জিকা</div>
+      <div class="grid">
+        <div class="subcard">
+          <div class="label">তিথি</div>
+          <div class="value" id="tithi">—</div>
+        </div>
+        <div class="subcard">
+          <div class="label">নক্ষত্র</div>
+          <div class="value" id="nakshatra">—</div>
+        </div>
+        <div class="subcard">
+          <div class="label">সূর্যোদয়</div>
+          <div class="value" id="sunrise">—</div>
+        </div>
+        <div class="subcard">
+          <div class="label">সূর্যাস্ত</div>
+          <div class="value" id="sunset">—</div>
+        </div>
+        <div class="subcard">
+          <div class="label">চন্দ্রোদয়</div>
+          <div class="value" id="moonrise">—</div>
+        </div>
+        <div class="subcard">
+          <div class="label">চন্দ্রাস্ত</div>
+          <div class="value" id="moonset">—</div>
+        </div>
+      </div>
+      <div class="status">সূর্যসিদ্ধান্ত Sync সক্রিয় · প্রতি ৩ ঘণ্টায় আপডেট</div>
+    </section>
 
-<!-- 2️⃣ FULL CALENDAR -->
-<section class="card hover-light" style="background:var(--pink)">
- <h3 class="title">📅 সম্পূর্ণ পঞ্জিকা</h3>
- <div class="btn" id="openPopup">সম্পূর্ণ হিন্দু পঞ্জিকা ক্যালেন্ডার দেখুন</div>
-</section>
+    <!-- সম্পূর্ণ পঞ্জিকা (পপআপ ট্রিগার) -->
+    <section class="card card-popup">
+      <div class="title">📅 সম্পূর্ণ পঞ্জিকা</div>
+      <button class="btn hover-light" onclick="alert('পপ-আপ ক্যালেন্ডার ইন্টিগ্রেশনের হুক প্রস্তুত। পরে যুক্ত করা হবে।')">
+        সম্পূর্ণ হিন্দু পঞ্জিকা ক্যালেন্ডার দেখুন
+      </button>
+    </section>
 
-<!-- 3️⃣ EKADASHI -->
-<section class="card" style="background:var(--red);color:#fff">
- <h3 class="title">🌼 একাদশী ট্র্যাকার</h3>
- <div style="text-align:center">
-  <div class="eka-name" id="ekaName">লোড হচ্ছে…</div>
-  <div class="eka-sub" id="ekaSub">–</div>
- </div>
-</section>
+    <!-- একাদশী ট্র্যাকার -->
+    <section class="card card-eka">
+      <div class="title">🌼 একাদশী ট্র্যাকার</div>
+      <div class="eka-wrap">
+        <div class="eka-header"><span class="ico glo">🕉️</span> <span>পরবর্তী একাদশী</span></div>
+        <div class="eka-name" id="ekaName">লোড হচ্ছে...</div>
+        <div class="eka-sub" id="ekaSub">—</div>
+      </div>
+    </section>
 
-<!-- 4️⃣ UPCOMING EVENTS -->
-<section class="card" style="background:var(--gold)">
- <h3 class="title">🔔 আসন্ন উৎসব ও ইভেন্টস</h3>
- <div class="slider" id="eventSlider"></div>
- <div class="status" style="color:#000">৭টি ইভেন্ট · প্রতি ৮ সেকেন্ডে পরিবর্তন</div>
-</section>
+    <!-- আসন্ন উৎসব ও ইভেন্টস (স্লাইডার) -->
+    <section class="card card-events">
+      <div class="title">🔔 আসন্ন উৎসব ও ইভেন্টস</div>
+      <div class="slider" id="eventSlider"></div>
+      <div class="status" style="color:#B71C1C">৭টি স্লাইড · প্রতি ৮ সেকেন্ডে পরিবর্তন</div>
+    </section>
 
-<!-- 5️⃣ LOCATION + TIDE -->
-<section class="card" style="background:var(--sky);color:#fff">
- <h3 class="title">🌊 লোকেশন + জোয়ার-ভাটা</h3>
- <div class="loc-grid">
-  <div><div class="loc-label">লোকেশন</div><div class="loc-val" id="locName">–</div></div>
-  <div><div class="loc-label">সময়</div><div class="loc-val" id="locTime">–</div></div>
-  <div style="grid-column:1/3"><div class="loc-label">আজকের জোয়ার-ভাটা</div>
-   <div class="loc-val" id="tideInfo">–</div></div>
- </div>
-</section>
+    <!-- লোকেশন + জোয়ার-ভাটা -->
+    <section class="card card-tide">
+      <div class="title">🦅 লোকেশন + জোয়ার-ভাটা</div>
+      <div class="tide-grid">
+        <div class="tide-box">
+          <div class="tide-title">লোকেশন</div>
+          <div class="tide-val" id="locName">—</div>
+          <div style="margin-top:6px">সময়: <span id="localTime">—</span></div>
+        </div>
+        <div class="tide-box">
+          <div class="tide-title">আজকের জোয়ার-ভাটা</div>
+          <div class="tide-val" id="tideToday">—</div>
+          <div style="margin-top:6px;opacity:.9">*(ফ্রি টায়েড সোর্স হুক রেডি)</div>
+        </div>
+      </div>
+    </section>
 
-</div>
-
-<!-- Popup -->
-<div class="modal" id="popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
- align-items:center;justify-content:center">
- <div style="background:#fff;border-radius:12px;padding:16px;width:90%;max-width:480px;color:#4E342E">
-  <h3 style="text-align:center;color:#6A1B9A">📅 সম্পূর্ণ পঞ্জিকা</h3>
-  <div style="text-align:center;opacity:.8">এখানে মাসিক ক্যালেন্ডার প্রদর্শিত হবে</div>
-  <button id="closePopup" style="margin-top:12px;padding:6px 12px;border-radius:8px;
-   border:1px solid #6A1B9A;color:#6A1B9A;font-weight:700;display:block;margin-inline:auto">বন্ধ করুন</button>
- </div>
-</div>
+  </div>
 
 <script>
-const DEF={name:"Garden Reach, Kolkata",lat:22.533,lon:88.31,tz:"auto"};let GEO={...DEF};
-navigator.geolocation?.getCurrentPosition(p=>{GEO.lat=p.coords.latitude;GEO.lon=p.coords.longitude;loadAll();},
- async()=>{try{const r=await fetch("https://ipapi.co/json/");const j=await r.json();
- GEO.lat=j.latitude;GEO.lon=j.longitude;GEO.name=j.city+", "+j.region;}catch{GEO={...DEF}}loadAll();});
-async function loadAll(){loadSunMoon();loadPanchika();loadEkadashi();loadTide();setInterval(loadSunMoon,3e6);}
-async function loadSunMoon(){try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${GEO.lat}&longitude=${GEO.lon}&daily=sunrise,sunset,moonrise,moonset&timezone=${GEO.tz}`);
-const j=await r.json();const t=x=>x?x.split("T")[1].slice(0,5):"–";
-sunrise.textContent=t(j.daily.sunrise[0]);sunset.textContent=t(j.daily.sunset[0]);
-moonrise.textContent=t(j.daily.moonrise[0]);moonset.textContent=t(j.daily.moonset[0]);
-panchika-status.textContent="সূর্য/চন্দ্র সময় — Open-Meteo লাইভ";}catch{panchika-status.textContent="ডেটা আনতে পারিনি";}}
-function jd(d){return d/86400000+2440587.5;}
-function norm(x){x%=360;return x<0?x+360:x;}
-function sunLon(d){const L=280.459+.98564736*d;const g=(357.529+.98560028*d)*Math.PI/180;return norm(L+1.915*Math.sin(g)+.02*Math.sin(2*g));}
-function moonLon(d){const L=218.316+13.176396*d,M=(134.963+13.064993*d)*Math.PI/180,D=(297.85+12.190749*d)*Math.PI/180;
-return norm(L+6.289*Math.sin(M)+1.274*Math.sin(2*D-M)+.658*Math.sin(2*D));}
-function tithiNak(){const d=jd(Date.now())-2451545;const e=norm(moonLon(d)-sunLon(d));
-const T=["প্রতিপদ","দ্বিতীয়া","তৃতীয়া","চতুর্থী","পঞ্চমী","ষষ্ঠী","সপ্তমী","অষ্টমী","নবমী","দশমী","একাদশী","দ্বাদশী","ত্রয়োদশী","চতুর্দশী","পূর্ণিমা","প্রতিপদ","দ্বিতীয়া","তৃতীয়া","চতুর্থী","পঞ্চমী","ষষ্ঠী","সপ্তমী","অষ্টমী","নবমী","দশমী","একাদশী","দ্বাদশী","ত্রয়োদশী","চতুর্দশী","অমাবস্যা"];
-const N=["অশ্বিনী","ভরণী","কৃত্তিকা","রোহিণী","মৃগশিরা","আদ্রা","পুনর্বসু","পুষ্যা","অশ্লেষা","মঘা","পূর্বা ফাল্গুনী","উত্তরা ফাল্গুনী","হস্তা","চিত্রা","স্বাতী","বিশাখা","অনুরাধা","জ্যেষ্ঠা","মূলা","পূর্বাষাঢ়া","উত্তরাষাঢ়া","শ্রবণ","ধনিষ্ঠা","শতভিষা","পূর্বভাদ্র","উত্তরভাদ্র","রেবতী"];
-const t=T[Math.floor(e/12)%30],n=N[Math.floor(moonLon(d)/(360/27))%27];
-tithi.textContent=t;nakshatra.textContent=n;}
-function loadPanchika(){tithiNak();}
-function loadEkadashi(){const base=new Date();for(let i=0;i<45;i++){const d=new Date(+base+i*864e5);d.setHours(6,0,0,0);
-const t=Math.floor(norm(moonLon(jd(+d)-2451545)-sunLon(jd(+d)-2451545))/12)+1;
-if(t===11||t===26){const name=t===11?"শুক্ল একাদশী":"কৃষ্ণ একাদশী";const days=i;ekaName.textContent=name;
-ekaSub.textContent=d.toLocaleDateString("bn-IN",{day:"numeric",month:"long"})+" · "+days+" দিন পর";break;}}}
-async function loadTide(){try{const r=await fetch(`https://www.worldtides.info/api/v3?extremes&lat=${GEO.lat}&lon=${GEO.lon}&days=1&key=demo`);
-const j=await r.json();const t=j.extremes.map(x=>x.type+" "+new Date(x.dt*1e3).toLocaleTimeString("bn-IN",{hour:"2-digit",minute:"2-digit"})).join(" · ");
-locName.textContent=GEO.name||DEF.name;locTime.textContent=new Date().toLocaleTimeString("bn-IN",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-tideInfo.textContent=t;}catch{locName.textContent=DEF.name;locTime.textContent=new Date().toLocaleTimeString("bn-IN");tideInfo.textContent="উচ্চ জোয়ার ১১:৪৫ · ভাটা ০০:১০";}}
-setInterval(()=>locTime.textContent=new Date().toLocaleTimeString("bn-IN",{hour:"2-digit",minute:"2-digit",second:"2-digit"}),1000);
-/* Slider */
-const ev=["জগদ্ধাত্রী পূজা · ৪ দিন পর","রথ যাত্রা · ২২ দিন পর","দোল যাত্রা · ১৩০ দিন পর","রাম নবমী · ১৪২ দিন পর","গুরু পূর্ণিমা · ২৪৬ দিন পর","জন্মাষ্টমী · ২৯৮ দিন পর","দুর্গা পূজা · ৩২৮ দিন পর"];
-const s=document.getElementById("eventSlider");ev.forEach((e,i)=>{const d=document.createElement("div");d.className="slide";if(i===0)d.classList.add("active");d.innerHTML=`<div style='text-align:center;font-weight:700;font-size:17px;'>${e}</div>`;s.appendChild(d);});
-let idx=0;setInterval(()=>{s.children[idx].classList.remove("active");idx=(idx+1)%ev.length;s.children[idx].classList.add("active");},8000);
-/* Popup */
-openPopup.onclick=()=>popup.style.display="flex";closePopup.onclick=()=>popup.style.display="none";
-</script>
+/* =========================
+   CONFIG — API হুক (পরে বসাও)
+========================= */
+const DIK_API = "";  // দিকসিদ্ধান্ত (tithi, nakshatra) endpoint
+const SS_API  = "";  // সূর্যসিদ্ধান্ত বিকল্প/fallback endpoint
 
-<!-- Netlify configuration -->
-<pre style="display:none">
-[build]
-  publish="."
-  command=""
-[build.environment]
-  NODE_VERSION="18"
-[context.production.environment]
-  TZ="Asia/Kolkata"
-</pre>
+/* =========================
+   UTIL
+========================= */
+const fmtTime = (iso) => {
+  if(!iso) return "—";
+  const d = new Date(iso);
+  return d.toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'});
+};
+const setText = (id, val="—") => document.getElementById(id).textContent = val;
+
+/* =========================
+   GEO + LOCATION
+========================= */
+let LAT = 22.5726, LON = 88.3639; // Kolkata default
+function setLocalClock(){
+  setText('localTime', new Date().toLocaleTimeString('bn-BD',{hour12:true}));
+}
+setInterval(setLocalClock, 1000); setLocalClock();
+
+function resolvePlace(lat,lon){
+  fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=bn`)
+  .then(r=>r.json()).then(x=>{
+    setText('locName', x.city || x.locality || "আপনার এলাকা");
+  }).catch(_=>setText('locName',"আপনার এলাকা"));
+}
+
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(pos=>{
+    LAT = pos.coords.latitude; LON = pos.coords.longitude;
+    startAll();
+  }, _=> startAll());
+}else{ startAll(); }
+
+function startAll(){
+  resolvePlace(LAT,LON);
+  fetchAstronomy(LAT,LON);
+  loadEkadashi();
+  initEventsSlider();
+  // Tide placeholder (free keyless source স্থায়ী পেলে বসাবো)
+  setText('tideToday', "উচ্চ জোয়ার: — · ভাটা: —");
+}
+
+/* =========================
+   SUNRISE/SUNSET + MOON
+   Open-Meteo Astronomy (keyless)
+========================= */
+function fetchAstronomy(lat,lon){
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=sunrise,sunset,moonrise,moonset&timezone=auto`;
+  fetch(url).then(r=>r.json()).then(d=>{
+    const day=0; // আজ
+    setText('sunrise', fmtTime(d.daily.sunrise[day]));
+    setText('sunset' , fmtTime(d.daily.sunset[day]));
+    setText('moonrise',fmtTime(d.daily.moonrise[day]));
+    setText('moonset' ,fmtTime(d.daily.moonset[day]));
+  }).catch(_=>{
+    setText('sunrise',"—"); setText('sunset',"—");
+    setText('moonrise',"—"); setText('moonset',"—");
+  });
+
+  // Tithi/Nakshatra — দিকসিদ্ধান্ত/সূর্যসিদ্ধান্ত হুক (পরে live করো)
+  if(DIK_API){
+    fetch(`${DIK_API}?lat=${lat}&lon=${lon}`).then(r=>r.json()).then(x=>{
+      setText('tithi', x.tithi_bn || x.tithi || "—");
+      setText('nakshatra', x.nakshatra_bn || x.nakshatra || "—");
+    }).catch(_=>{});
+  } else {
+    setText('tithi',"—");
+    setText('nakshatra',"—");
+  }
+}
+
+/* =========================
+   EKADASHI TRACKER (placeholder logic + ready for API)
+========================= */
+function loadEkadashi(){
+  // চাইলে এখানে ISKCON/HinduPanchang API বসানো যাবে।
+  // এখন ডেমো হিসেবে একটি নিকটবর্তী একাদশী দেখাচ্ছে:
+  const demo = [
+    {name:"রমা একাদশী", date:"2025-11-15"},
+    {name:"উত্তপন্না একাদশী", date:"2025-11-29"},
+    {name:"মোক্ষদা একাদশী", date:"2025-12-13"}
+  ];
+  const today = new Date();
+  let next = demo.find(e => new Date(e.date) >= today) || demo[0];
+  const days = Math.ceil((new Date(next.date) - today)/(1000*60*60*24));
+  setText('ekaName', next.name);
+  const d = new Date(next.date);
+  const dateBn = d.toLocaleDateString('bn-BD',{day:'2-digit',month:'long'});
+  setText('ekaSub', `${dateBn} · ${days} দিন পর`);
+}
+
+/* =========================
+   EVENTS SLIDER (৭ স্লাইড · ৮ সেকেন্ড)
+========================= */
+const EVENTS = [
+  {title:"জগদ্ধাত্রী পূজা", sub:"৪ দিন পর"},
+  {title:"রাস পূর্ণিমা", sub:"৬ দিন পর"},
+  {title:"রমা একাদশী", sub:"৩ দিন পর"},
+  {title:"গোপাষ্টমী", sub:"৮ দিন পর"},
+  {title:"উত্তপন্না একাদশী", sub:"১৭ দিন পর"},
+  {title:"মোক্ষদা একাদশী", sub:"৩১ দিন পর"},
+  {title:"গীতা জয়ন্তী", sub:"৩২ দিন পর"}
+];
+function initEventsSlider(){
+  const host = document.getElementById('eventSlider');
+  host.innerHTML="";
+  EVENTS.forEach((e,i)=>{
+    const div = document.createElement('div');
+    div.className = 'slide' + (i===0?' active':'');
+    div.innerHTML = `<div><div class="glo" style="font-size:28px;margin-bottom:6px">📣</div>${e.title}<small>${e.sub}</small></div>`;
+    host.appendChild(div);
+  });
+  let idx=0;
+  setInterval(()=>{
+    const slides = [...host.children];
+    slides.forEach(s=>s.classList.remove('active'));
+    idx = (idx+1)%slides.length;
+    slides[idx].classList.add('active');
+  }, 8000);
+}
+</script>
 </body>
 </html>

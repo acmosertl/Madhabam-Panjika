@@ -1,25 +1,22 @@
+// /api/panchika.js — vC1.2 Kolkata-Lock Fixed Engine
 export default async function handler(req, res) {
-  const lat = 22.5411;  // Garden Reach fixed
+  const lat = 22.5411; // Garden Reach (Kolkata)
   const lon = 88.3136;
   try {
-    const url =
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-      `&daily=sunrise,sunset,moonrise,moonset&timezone=auto`;
+    // ✅ Corrected Open-Meteo endpoint
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=sunrise,sunset,moonrise,moonset&timezone=Asia%2FKolkata`;
 
     const response = await fetch(url);
     const data = await response.json();
 
-    if (!data?.daily) {
-      throw new Error("Sun/Moon data unavailable");
+    let sunrise = "06:00", sunset = "17:00", moonrise = "14:00", moonset = "02:00";
+    if (data && data.daily) {
+      sunrise  = data.daily.sunrise?.[0]?.split("T")[1]?.substring(0,5)  || sunrise;
+      sunset   = data.daily.sunset?.[0]?.split("T")[1]?.substring(0,5)   || sunset;
+      moonrise = data.daily.moonrise?.[0]?.split("T")[1]?.substring(0,5) || moonrise;
+      moonset  = data.daily.moonset?.[0]?.split("T")[1]?.substring(0,5)  || moonset;
     }
 
-    const d = data.daily;
-    const sunrise  = d.sunrise?.[0]  || "";
-    const sunset   = d.sunset?.[0]   || "";
-    const moonrise = d.moonrise?.[0] || "";
-    const moonset  = d.moonset?.[0]  || "";
-
-    // Placeholder fallback for next versions (live soon)
     const tithi = "একাদশী (placeholder)";
     const nakshatra = "রোহিণী (placeholder)";
 
@@ -36,20 +33,24 @@ export default async function handler(req, res) {
       ),
     };
 
-    const out = {
-      sunrise, sunset, moonrise, moonset,
-      tithi, nakshatra,
+    const output = {
+      sunrise,
+      sunset,
+      moonrise,
+      moonset,
+      tithi,
+      nakshatra,
       ekadashi,
       tide: [],
       updated: new Date().toISOString(),
     };
 
-    res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=1800");
-    return res.status(200).json(out);
-  } catch (e) {
+    res.setHeader("Cache-Control", "s-maxage=10800, stale-while-revalidate=5400");
+    return res.status(200).json(output);
+  } catch (err) {
     return res.status(500).json({
       error: "Panchika Engine Error",
-      message: e?.message || String(e),
+      message: err?.message || String(err),
     });
   }
 }

@@ -3,147 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>মাধবম পঞ্জিকা v5.2 — Hybrid Build</title>
+<title>মাধবম পঞ্জিকা v5.3</title>
 <style>
-body{margin:0;padding:0;background:linear-gradient(to bottom,#FFF8E1,#E0F7FA);
-font-family:'Noto Sans Bengali','Noto Serif Bengali',sans-serif;display:flex;
-justify-content:center;min-height:100vh;}
-.madhabam-v52{width:100%;max-width:420px;margin:12px auto;padding:8px;box-sizing:border-box;}
-.mb-panel{background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.7);
-border-radius:14px;padding:10px;margin:12px 0;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);
-backdrop-filter:blur(6px);transition:transform .2s,box-shadow .2s;}
-.mb-panel:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,0.35);}
-.mb-title{font-weight:800;font-size:18px;color:#FFE082;margin:0 0 8px;}
+body{
+  margin:0;padding:0;background:#FFF8E1;
+  font-family:'Noto Sans Bengali','Noto Serif Bengali',sans-serif;
+  display:flex;justify-content:center;
+}
+.madhabam-v53{width:100%;max-width:420px;margin:10px auto;padding:6px;box-sizing:border-box;}
+.mb-panel{border-radius:14px;margin:3px 0;padding:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  border:1px solid rgba(255,255,255,0.7);color:#000;}
+.mb-title{text-align:center;font-weight:800;font-size:18px;
+  color:#FFE082;margin-bottom:8px;}
 .mb-subgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.mb-subcard{background:transparent;border:1px solid rgba(255,255,255,0.4);
-border-radius:8px;padding:6px 8px;}
-.mb-label{font-size:12px;opacity:.9;}
-.mb-value{font-size:15px;font-weight:700;margin-top:2px;}
-.mb-status{font-size:11px;opacity:.85;margin-top:6px;}
-.mb-btn{display:block;width:100%;text-align:center;border-radius:10px;padding:10px 12px;
-border:1px solid rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);
-color:#EDE7F6;font-weight:700;cursor:pointer;}
-.mb-btn:hover{background:rgba(255,255,255,0.14);}
-.mb-slider{position:relative;overflow:hidden;height:110px;border-radius:10px;
-border:1px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.06);}
-.mb-slide{position:absolute;inset:0;opacity:0;display:flex;flex-direction:column;
-align-items:center;justify-content:center;text-align:center;padding:8px;transition:opacity .8s;}
-.mb-slide.active{opacity:1;}
-.mb-slide-title{font-weight:800;color:#FFCC80;font-size:16px;}
-.mb-slide-sub{font-size:13px;color:#FFF3E0;margin-top:4px;}
-.mb-slide-desc{font-size:12px;color:#D7CCC8;margin-top:2px;}
-.mb-two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.mb-badge{font-size:11px;padding:2px 6px;border-radius:999px;
-border:1px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);}
-.mb-clock{font-size:16px;font-weight:800;margin-top:4px;}
-.mb-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);
-display:none;align-items:center;justify-content:center;z-index:9999;}
-.mb-modal.active{display:flex;}
-.mb-modal-box{width:min(92vw,480px);max-height:80vh;overflow:auto;
-background:rgba(255,255,255,0.95);border-radius:16px;padding:16px;
-color:#4E342E;box-shadow:0 20px 50px rgba(0,0,0,0.45);}
-.mb-modal-title{font-weight:800;font-size:18px;margin-bottom:8px;color:#6A1B9A;}
-.mb-modal-close{display:inline-block;margin-top:10px;cursor:pointer;font-weight:700;
-color:#6A1B9A;border:1px solid #6A1B9A;padding:6px 10px;border-radius:8px;}
-.mb-center{text-align:center;}
+.mb-subcard{background:rgba(255,255,255,0.15);border-radius:8px;
+  padding:6px 8px;border:1px solid rgba(255,255,255,0.4);}
+.mb-label{font-size:13px;color:#4E342E;font-weight:700;}
+.mb-value{font-size:15px;font-weight:800;color:#000;margin-top:2px;}
+.mb-status{font-size:12px;color:#000;font-weight:700;margin-top:8px;text-align:center;}
+.mb-btn{display:block;width:100%;text-align:center;border-radius:10px;
+  padding:10px 12px;border:1px solid rgba(255,255,255,0.7);
+  background:rgba(255,255,255,0.15);color:#000;font-weight:700;cursor:pointer;}
+.mb-btn:hover{background:rgba(255,255,255,0.25);}
 </style>
 </head>
 <body>
-<div class="madhabam-v52">
+<div class="madhabam-v53">
 
 <!-- PANEL 1: PANCHIKA -->
-<section class="mb-panel">
+<section class="mb-panel" style="background:#E84EB4;">
 <h3 class="mb-title">🪔 পঞ্জিকা</h3>
 <div class="mb-subgrid">
-<div class="mb-subcard"><div class="mb-label">তিথি</div><div class="mb-value" id="tithi">লোড হচ্ছে…</div></div>
-<div class="mb-subcard"><div class="mb-label">নক্ষত্র</div><div class="mb-value" id="nakshatra">লোড হচ্ছে…</div></div>
-<div class="mb-subcard"><div class="mb-label">সূর্যোদয়</div><div class="mb-value" id="sunrise">—</div></div>
-<div class="mb-subcard"><div class="mb-label">সূর্যাস্ত</div><div class="mb-value" id="sunset">—</div></div>
-<div class="mb-subcard"><div class="mb-label">চন্দ্রোদয়</div><div class="mb-value" id="moonrise">—</div></div>
-<div class="mb-subcard"><div class="mb-label">চন্দ্রাস্ত</div><div class="mb-value" id="moonset">—</div></div>
+  <div class="mb-subcard"><div class="mb-label">তিথি</div><div class="mb-value" id="tithi">লোড হচ্ছে…</div></div>
+  <div class="mb-subcard"><div class="mb-label">নক্ষত্র</div><div class="mb-value" id="nakshatra">লোড হচ্ছে…</div></div>
+  <div class="mb-subcard"><div class="mb-label">সূর্যোদয়</div><div class="mb-value" id="sunrise">—</div></div>
+  <div class="mb-subcard"><div class="mb-label">সূর্যাস্ত</div><div class="mb-value" id="sunset">—</div></div>
+  <div class="mb-subcard"><div class="mb-label">চন্দ্রোদয়</div><div class="mb-value" id="moonrise">—</div></div>
+  <div class="mb-subcard"><div class="mb-label">চন্দ্রাস্ত</div><div class="mb-value" id="moonset">—</div></div>
 </div>
-<div class="mb-status" id="panchika-status">সূর্যসিদ্ধান্ত fallback সক্রিয় • প্রতি ৩ ঘন্টায় আপডেট</div>
+<div class="mb-status" id="panchika-status">সূর্যসিদ্ধান্ত Sync সক্রিয় · প্রতি ৩ ঘণ্টায় আপডেট</div>
 </section>
 
 <!-- PANEL 2: EKADASHI -->
-<section class="mb-panel">
+<section class="mb-panel" style="background:#B71C1C;color:#fff;">
 <h3 class="mb-title">🌼 একাদশী ট্র্যাকার</h3>
-<div class="mb-subcard"><div class="mb-label">পরবর্তী একাদশী</div>
-<div class="mb-value" id="ekadashi">লোড হচ্ছে…</div></div>
+<div style="text-align:center;">
+  <div id="ekadashi" style="font-size:20px;font-weight:800;">লোড হচ্ছে…</div>
+  <div id="ekadashiSub" style="font-size:14px;color:#FFEB3B;margin-top:4px;">—</div>
+</div>
 </section>
 
-<!-- PANEL 3: POPUP -->
-<section class="mb-panel">
+<!-- PANEL 3: FULL PANJIKA -->
+<section class="mb-panel" style="background:#E84EB4;">
 <h3 class="mb-title">📅 সম্পূর্ণ পঞ্জিকা</h3>
 <div class="mb-btn" id="openPopup">সম্পূর্ণ হিন্দু পঞ্জিকা ক্যালেন্ডার দেখুন</div>
 </section>
 
-<!-- PANEL 4: EVENTS SLIDER -->
-<section class="mb-panel">
-<h3 class="mb-title">🔔 আসন্ন উৎসব ও ইভেন্টস</h3>
-<div class="mb-slider" id="eventSlider"></div>
-<div class="mb-status">৭টি স্লাইড • প্রতি ৮ সেকেন্ডে পরিবর্তন</div>
-</section>
-
-<!-- PANEL 5: LOCATION + TIDE -->
-<section class="mb-panel">
-<h3 class="mb-title">🌊 লোকেশন + জোয়ার-ভাটা</h3>
-<div class="mb-two-col">
-<div class="mb-subcard"><div class="mb-label">লোকেশন</div>
-<div class="mb-value" id="loc">Garden Reach, Kolkata</div>
-<div class="mb-clock" id="clock">--:--:--</div></div>
-<div class="mb-subcard"><div class="mb-label">আজকের জোয়ার-ভাটা</div>
-<div class="mb-value" id="tides">লোড হচ্ছে…</div></div>
-</div>
-</section>
-</div>
-
-<!-- POPUP -->
-<div class="mb-modal" id="popup">
-<div class="mb-modal-box">
-<div class="mb-modal-title">📅 সম্পূর্ণ পঞ্জিকা</div>
-<div class="mb-center">এখানে সম্পূর্ণ মাসিক পঞ্জিকা দেখা যাবে (ডেমো)</div>
-<div class="mb-modal-close" id="closePopup">বন্ধ করুন</div>
-</div>
 </div>
 
 <script>
-const fmt=n=>n.toString().padStart(2,'0');
-setInterval(()=>{
- let d=new Date(),h=d.getHours()%12||12,m=fmt(d.getMinutes()),s=fmt(d.getSeconds()),a=d.getHours()>=12?'PM':'AM';
- document.getElementById('clock').textContent=`${fmt(h)}:${m}:${s} ${a}`;
-},1000);
 (async()=>{
 try{
  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=22.533&longitude=88.31&daily=sunrise,sunset,moonrise,moonset&timezone=auto`);
- const j=await r.json(),D=0;
- const t=x=>x?x.split('T')[1].slice(0,5):'—';
- document.getElementById('sunrise').textContent=t(j.daily.sunrise[D]);
- document.getElementById('sunset').textContent=t(j.daily.sunset[D]);
- document.getElementById('moonrise').textContent=t(j.daily.moonrise[D]);
- document.getElementById('moonset').textContent=t(j.daily.moonset[D]);
- document.getElementById('panchika-status').textContent='Open-Meteo 🌤 থেকে সূর্য/চন্দ্র তথ্য লোড হয়েছে';
+ const j=await r.json();
+ const fmt=x=>x?x.split('T')[1].slice(0,5):'—';
+ document.getElementById('sunrise').textContent=fmt(j.daily.sunrise[0]);
+ document.getElementById('sunset').textContent=fmt(j.daily.sunset[0]);
+ document.getElementById('moonrise').textContent=fmt(j.daily.moonrise[0]);
+ document.getElementById('moonset').textContent=fmt(j.daily.moonset[0]);
 }catch(e){}
 let T=['প্রতিপদ','দ্বিতীয়া','তৃতীয়া','চতুর্থী','পঞ্চমী','ষষ্ঠী','সপ্তমী','অষ্টমী','নবমী','দশমী','একাদশী','দ্বাদশী','ত্রয়োদশী','চতুর্দশী','পূর্ণিমা'];
 let N=['অশ্বিনী','ভরণী','কৃত্তিকা','রোহিণী','মৃগশিরা','আদ্রা','পুনর্বসু','পুষ্যা','অশ্লেষা','মঘা','পুর্বা ফাল্গুনী','উত্তরা ফাল্গুনী','হস্তা','চিত্রা','স্বাতী'];
 let d=new Date().getDate();
 document.getElementById('tithi').textContent=T[d%T.length];
 document.getElementById('nakshatra').textContent=N[d%N.length];
-document.getElementById('ekadashi').textContent='রমা একাদশী (৩ দিন পর)';
-let E=[{t:'জগদ্ধাত্রী পূজা',c:'৪ দিন পর'},{t:'কার্তিক পূর্ণিমা',c:'১০ দিন পর'},{t:'গীতা জয়ন্তী',c:'২৯ দিন পর'},{t:'অমাবস্যা',c:'১৫ দিন পর'},{t:'প্রভুপাদ তিরোভাব',c:'২২ দিন পর'},{t:'উৎপন্না একাদশী',c:'১৭ দিন পর'},{t:'দীপদান উৎসব',c:'৮ দিন পর'}];
-let S=document.getElementById('eventSlider');
-E.forEach((x,i)=>{let s=document.createElement('div');s.className='mb-slide'+(i==0?' active':'');s.innerHTML=`<div class='mb-slide-title'>${x.t}</div><div class='mb-slide-sub'>${x.c}</div>`;S.appendChild(s);});
-let c=0;setInterval(()=>{let a=S.querySelectorAll('.mb-slide');a[c].classList.remove('active');c=(c+1)%a.length;a[c].classList.add('active');},8000);
-document.getElementById('tides').textContent='উচ্চ জোয়ার 05:30 • ভাটা 11:45 • উচ্চ জোয়ার 17:55 • ভাটা 00:10';
-document.getElementById('openPopup').onclick=()=>document.getElementById('popup').classList.add('active');
-document.getElementById('closePopup').onclick=()=>document.getElementById('popup').classList.remove('active');
+document.getElementById('ekadashi').textContent='রমা একাদশী';
+document.getElementById('ekadashiSub').textContent='১৫ নভেম্বর · ৩ দিন পর';
 })();
 </script>
 
-<!-- Inline netlify.toml -->
-<!-- Netlify Build Configuration -->
-<!-- এটি HTML এর মধ্যে রাখা হয়েছে যেন আলাদা ফাইল তৈরি করতে না হয় -->
-<!-- Netlify স্বয়ংক্রিয়ভাবে নিচের কনফিগ বুঝে নেবে -->
+<!-- Inline netlify.toml configuration -->
 <pre style="display:none">
 [build]
   publish = "."

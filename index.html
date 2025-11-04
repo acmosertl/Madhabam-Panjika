@@ -190,5 +190,42 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
 </script>
 <!-- ⬆ এখানেই শেষ -->
 
+  <script>
+// 🔄 Auto-refresh Panchika every 3 hours
+async function autoRefreshPanchika() {
+  try {
+    const res = await fetch('/api/update');
+    const data = await res.json();
+
+    if (data.ok && data.data) {
+      const p = data.data;
+      document.querySelector('.tithi').textContent = p.tithi || '-';
+      document.querySelector('.nakshatra').textContent = p.nakshatra || '-';
+      document.querySelector('.sunrise').textContent = p.sunrise;
+      document.querySelector('.sunset').textContent = p.sunset;
+      document.querySelector('.moonrise').textContent = p.moonrise;
+      document.querySelector('.moonset').textContent = p.moonset;
+
+      // একাদশী তথ্য আপডেট
+      document.querySelector('.ekadashi-name').textContent = p.ekadashi.name;
+      document.querySelector('.ekadashi-date').textContent = p.ekadashi.date;
+      document.querySelector('.ekadashi-days').textContent = `${p.ekadashi.days_left} দিন বাকি`;
+
+      // সর্বশেষ আপডেট সময়
+      document.querySelector('.last-updated').textContent = 
+        `আপডেট হয়েছে: ${new Date(p.updated).toLocaleTimeString('bn-BD')}`;
+    }
+  } catch (err) {
+    console.error('Panchika update failed:', err);
+  }
+}
+
+// প্রথমবার লোডের সময় কল করো
+autoRefreshPanchika();
+
+// প্রতি ৩ ঘন্টা অন্তর রিফ্রেশ করো (3 × 60 × 60 × 1000 ms)
+setInterval(autoRefreshPanchika, 10800000);
+  </script>
+  
 </body>
 </html>

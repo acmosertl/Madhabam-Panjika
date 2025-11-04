@@ -144,70 +144,51 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
   </div>
 </div>
 
+<!-- ⬇ এই স্ক্রিপ্ট ব্লকটা পুরনো index.html-এর শেষে </body> ট্যাগের আগে বসাও -->
 <script>
-function stylizeTime(el, raw){
-  if(!raw){ el.textContent='—'; return; }
-  const parts=raw.trim().split(/\s+/); const ampm=parts.pop(); const hhmm=parts.join(' ');
-  el.innerHTML = `${hhmm} <span class="ampm">${ampm}</span>`;
-}
-function bnDigits(s){return String(s).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);}
-function liveClock(){
-  const now=new Date(); let h=now.getHours(), m=now.getMinutes(), s=now.getSeconds();
-  const ampm = h>=12 ? "PM":"AM"; h=((h+11)%12)+1;
-  const pad=x=>String(x).padStart(2,"0");
-  return `${bnDigits(pad(h))}:${bnDigits(pad(m))}:${bnDigits(pad(s))} <span class="ampm">${ampm}</span>`;
-}
-
-(async()=>{
+(async function(){
   try{
-    const j = await fetch('/api/panchika').then(r=>r.json());
-    // Panchika
-    document.getElementById('tithi').textContent = j.tithi?.name_bn || '—';
-    document.getElementById('tithiEnds').textContent = j.tithi?.ends_at || '—';
-    document.getElementById('tithiNext').textContent = j.tithi?.next_bn || '—';
-    document.getElementById('paksha').textContent = j.paksha || '—';
-    document.getElementById('nakshatra').textContent = j.nakshatra?.name_bn || '—';
-    document.getElementById('nEnd').textContent = j.nakshatra?.ends_at || '—';
-    document.getElementById('nNext').textContent = j.nakshatra?.next_bn || '—';
+    const res = await fetch('/data/panchika.json?'+Date.now());
+    const d = await res.json();
 
-    // Times
-    ['sunrise','sunset','moonrise','moonset'].forEach(id=>{
-      const el=document.getElementById(id);
-      stylizeTime(el, j[id]);
-    });
+    // Panchika
+    set('tithi', d.tithi);
+    set('nakshatra', d.nakshatra);
+    set('sunrise', d.sunrise);
+    set('sunset', d.sunset);
+    set('moonrise', d.moonrise);
+    set('moonset', d.moonset);
 
     // Ekadashi
-    document.getElementById('ekaName').textContent = j.ekadashi?.name_bn || '—';
-    document.getElementById('ekaDate').textContent = j.ekadashi?.date || '—';
-    document.getElementById('ekaLeft').textContent = (j.ekadashi?.days_left ?? '—') + ' দিন বাকি';
-    document.getElementById('ekaParana').textContent = j.ekadashi?.parana_note || '';
+    if (d.ekadashi){
+      set('ekaName', d.ekadashi.name);
+      set('ekaMeta', `${formatDate(d.ekadashi.date)} • ${d.ekadashi.days_left} দিন বাকি`);
+    }
 
-    // Upcoming
-    document.getElementById('festName').textContent = '📣 ' + (j.upcoming?.title || '—');
-    document.getElementById('festDate').textContent = (j.upcoming?.date || '—') + ' • ' + (j.upcoming?.days_left ?? '—') + ' দিন পরে';
+    // Festival
+    if (d.events && d.events.length){
+      set('festName', d.events[0].name);
+      set('festMeta', `${formatDate(d.events[0].date)} • ${d.events[0].days_left} দিন পরে`);
+    }
 
     // Tide
-    stylizeTime(document.getElementById('tj1'), j.tide?.high?.[0]);
-    stylizeTime(document.getElementById('tj2'), j.tide?.high?.[1]);
-    stylizeTime(document.getElementById('tv1'), j.tide?.low?.[0]);
-    stylizeTime(document.getElementById('tv2'), j.tide?.low?.[1]);
-
-    // Live Kolkata time on both tide cards
-    const tick=()=> {
-      const t = liveClock();
-      document.getElementById('kTimeJ').innerHTML = t;
-      document.getElementById('kTimeV').innerHTML = t;
-    };
-    tick(); setInterval(tick,1000);
-
-  }catch(e){ console.error(e); }
+    const T = d.tide || [];
+    set('th1', T[0]?.time || '—');
+    set('th2', T[1]?.time || '—');
+    set('tl1', T[2]?.time || '—');
+    set('tl2', T[3]?.time || '—');
+  }catch(e){console.error(e);}
+  
+  function set(id,v){ const el=document.getElementById(id); if(el) el.textContent=v??'—'; }
+  function formatDate(str){
+    try{
+      const d=new Date(str+'T00:00:00');
+      return new Intl.DateTimeFormat('bn-BD',{day:'2-digit',month:'short',year:'numeric'}).format(d);
+    }catch{return str;}
+  }
 })();
-
-// Popup calendar modal
-const modal = document.getElementById('calModal');
-document.getElementById('openCal').addEventListener('click',()=>{ modal.style.display='flex'; });
-document.getElementById('closeCal').addEventListener('click',()=>{ modal.style.display='none'; });
-modal.addEventListener('click',e=>{ if(e.target===modal) modal.style.display='none'; });
 </script>
+<!-- ⬆ এখানেই শেষ -->
+
 </body>
 </html>

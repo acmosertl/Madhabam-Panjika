@@ -2,137 +2,212 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>🪔 মাধবম পঞ্জিকা vC3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🪔 মাধবম পঞ্জিকা vC4</title>
 <style>
 :root{
   --bg:#fff4e3;--card:#fff8ee;--pink:#f6a9d6;
-  --deep:#0d2a68;--red:#c62828;--gold:#ffd740;
-  --label:#4527a0;--glow:#52ff8f;--shadow:0 6px 16px rgba(0,0,0,.12);
+  --red:#c62828;--gold:#ffd740;--label:#4527a0;
+  --glow:#52ff8f;--shadow:0 6px 16px rgba(0,0,0,.12);
 }
-body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",sans-serif}
-.wrap{max-width:860px;margin:16px auto;padding:8px}
-.card{background:var(--card);border-radius:22px;padding:16px;margin:12px;box-shadow:var(--shadow)}
-.title{text-align:center;font-weight:900;font-size:22px;margin-bottom:10px}
-.grid{display:grid;gap:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,sans-serif;color:#1a1a1a}
+.wrap{max-width:860px;margin:14px auto;padding:8px}
+.card{background:var(--card);border-radius:20px;padding:14px;margin:10px;box-shadow:var(--shadow)}
+.title{text-align:center;font-weight:900;font-size:22px;margin-bottom:8px}
+.grid{display:grid;gap:10px}
 .grid-2{grid-template-columns:1fr 1fr}
-.pill{background:var(--pink);border-radius:16px;padding:14px}
-.label{color:var(--label);font-weight:800;margin-bottom:6px}
-.value{font-weight:900;font-size:26px;line-height:1.2}
-.sub{font-size:16px;font-weight:700;margin-top:4px}
 
-/* একাদশী */
+/* Pills */
+.pill{background:var(--pink);border-radius:14px;padding:12px}
+.label{color:var(--label);font-weight:900;margin-bottom:4px}
+.value{font-weight:900;font-size:26px;line-height:1.18}
+.sub{font-size:16px;margin-top:4px}
+.sub b{font-weight:900}
+
+/* Ekadashi */
 .eka{background:var(--red);color:#fff;text-align:center}
-.eka-name{color:var(--gold);font-size:40px;font-weight:900;text-shadow:0 0 15px #ffeb3b,0 0 30px #ffd54f}
-.eka-meta{font-size:20px;font-weight:700;margin-top:6px}
+.eka-name{color:var(--gold);font-size:40px;font-weight:900;letter-spacing:.2px;
+  text-shadow:0 0 14px #ffeb3b,0 0 28px #ffd54f}
+.eka-meta{font-size:20px;font-weight:800;margin-top:4px}
 
-/* উৎসব */
-.up{background:#ffe895;text-align:center;color:#b71c1c;border-radius:22px}
-.up .name{font-weight:900;font-size:28px}
-.up .meta{font-weight:800;font-size:20px;margin-top:6px}
+/* Upcoming (bigger, full width) */
+.up{background:#ffe895;text-align:center;color:#b71c1c}
+.up .name{font-weight:900;font-size:30px}
+.up .meta{font-weight:900;font-size:20px;margin-top:4px}
 
-/* Tide full width */
-.tide{background:linear-gradient(180deg,#183a8a,#0b2257);color:#fff;padding:14px;border-radius:22px}
-.tideTitle{text-align:center;font-size:20px;font-weight:900;margin-bottom:10px}
-.tideGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tCell{background:rgba(255,255,255,.1);border-radius:14px;padding:12px;text-align:center}
-.tLab{font-weight:800;margin-bottom:2px}
+/* Tide blocks: exactly two full-width cards */
+.tideBlock{background:linear-gradient(180deg,#183a8a,#0b2257);color:#fff;border-radius:18px;padding:12px;margin:10px}
+.tbTitle{text-align:center;font-size:20px;font-weight:900;margin-bottom:8px}
+.tideGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tCell{background:rgba(255,255,255,.1);border-radius:12px;padding:10px;text-align:center}
+.tLab{color:#fff;font-weight:900;margin-bottom:2px}
 .tVal{font-weight:900;font-size:22px;color:var(--glow);text-shadow:0 0 10px rgba(82,255,143,.55)}
-.kolkata{text-align:center;margin-top:10px;font-weight:900;color:#ffd54f}
+.kolkata{color:#ffd54f;text-align:center;font-weight:900;margin-top:8px}
 .kTime{color:var(--glow);font-weight:900;font-size:18px}
 
-/* AM/PM ছোট */
-.ampm{font-size:.8em;margin-left:4px}
+/* AM/PM smaller */
+.time .ampm{font-size:.82em;margin-left:4px}
 
-/* Glow helper */
-.glow{color:var(--glow);text-shadow:0 0 10px var(--glow)}
+/* Popup calendar trigger + modal */
+.trigger{background:#FFF8E1;color:#7B1FA2;text-align:center;border-radius:12px;padding:12px;font-weight:900;cursor:pointer}
+.trigger:hover{filter:brightness(1.05)}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);z-index:50}
+.modal .box{background:#fff;border-radius:16px;max-width:900px;width:94%;padding:14px}
+.modal .head{display:flex;justify-content:space-between;align-items:center;font-weight:900;margin-bottom:8px}
+.modal .body{height:60vh;border:1px solid #eee;border-radius:10px;overflow:auto;padding:8px}
+.close{cursor:pointer;font-weight:900}
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <!-- পঞ্জিকা -->
   <section class="card">
     <div class="title">🪔 পঞ্জিকা</div>
     <div class="grid">
       <div class="pill">
         <div class="label">তিথি</div>
         <div class="value" id="tithi">—</div>
-        <div class="sub"><b id="tithiEnds">শেষ:</b> — <b>•</b> <b id="tithiNext">পরবর্তী:</b> —</div>
+        <div class="sub"><b>শেষ:</b> <span id="tithiEnds">—</span> &nbsp; <b>•</b> &nbsp; <b>পরবর্তী:</b> <span id="tithiNext">—</span></div>
       </div>
       <div class="pill">
-        <div class="label">পক্ষ</div><div class="value" id="paksha">—</div>
+        <div class="label">পক্ষ</div>
+        <div class="value" id="paksha">—</div>
       </div>
       <div class="pill">
         <div class="label">নক্ষত্র</div>
         <div class="value" id="nakshatra">—</div>
-        <div class="sub"><b id="nEnd">শেষ:</b> — <b>•</b> <b id="nNext">পরবর্তী:</b> —</div>
+        <div class="sub"><b>শেষ:</b> <span id="nEnd">—</span> &nbsp; <b>•</b> &nbsp; <b>পরবর্তী:</b> <span id="nNext">—</span></div>
       </div>
     </div>
-    <div class="grid grid-2" style="margin-top:12px">
-      <div class="pill"><div class="label">সূর্যোদয়</div><div class="value" id="sunrise">—</div></div>
-      <div class="pill"><div class="label">সূর্যাস্ত</div><div class="value" id="sunset">—</div></div>
-      <div class="pill"><div class="label">চন্দ্রোদয়</div><div class="value" id="moonrise">—</div></div>
-      <div class="pill"><div class="label">চন্দ্রাস্ত</div><div class="value" id="moonset">—</div></div>
+    <div class="grid grid-2" style="margin-top:10px">
+      <div class="pill"><div class="label">সূর্যোদয়</div><div class="value time" id="sunrise">—</div></div>
+      <div class="pill"><div class="label">সূর্যাস্ত</div><div class="value time" id="sunset">—</div></div>
+      <div class="pill"><div class="label">চন্দ্রোদয়</div><div class="value time" id="moonrise">—</div></div>
+      <div class="pill"><div class="label">চন্দ্রাস্ত</div><div class="value time" id="moonset">—</div></div>
     </div>
   </section>
 
+  <!-- Popup Calendar trigger -->
+  <section class="card trigger" id="openCal">📅 সম্পূর্ণ হিন্দু পঞ্জিকা ক্যালেন্ডার দেখুন</section>
+
+  <!-- একাদশী -->
   <section class="card eka">
     <div class="title">🌼 পরবর্তী একাদশী</div>
     <div class="eka-name" id="ekaName">—</div>
     <div class="eka-meta" id="ekaDate">—</div>
     <div class="eka-meta" id="ekaLeft">— দিন বাকি</div>
+    <div class="eka-meta" id="ekaParana">—</div>
   </section>
 
+  <!-- আসন্ন উৎসব -->
   <section class="card up">
     <div class="name" id="festName">📣 —</div>
     <div class="meta" id="festDate">—</div>
   </section>
 
-  <section class="card tide">
-    <div class="tideTitle">🌊 আজকের জোয়ার-ভাটা</div>
+  <!-- Tide → দুটি ফুল-উইডথ কার্ড -->
+  <section class="tideBlock">
+    <div class="tbTitle">🌊 আজকের জোয়ার</div>
     <div class="tideGrid">
-      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ১</div><div class="tVal" id="tj1">—</div></div>
-      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ২</div><div class="tVal" id="tj2">—</div></div>
-      <div class="tCell"><div class="tLab">নিম্ন ভাটা ১</div><div class="tVal" id="tv1">—</div></div>
-      <div class="tCell"><div class="tLab">নিম্ন ভাটা ২</div><div class="tVal" id="tv2">—</div></div>
+      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ১</div><div class="tVal time" id="tj1">—</div></div>
+      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ২</div><div class="tVal time" id="tj2">—</div></div>
     </div>
     <div class="kolkata">🕒 কলকাতা</div>
-    <div class="kTime" id="kTime">—</div>
+    <div class="kTime" id="kTimeJ">—</div>
   </section>
+
+  <section class="tideBlock">
+    <div class="tbTitle">🌊 আজকের ভাটা</div>
+    <div class="tideGrid">
+      <div class="tCell"><div class="tLab">নিম্ন ভাটা ১</div><div class="tVal time" id="tv1">—</div></div>
+      <div class="tCell"><div class="tLab">নিম্ন ভাটা ২</div><div class="tVal time" id="tv2">—</div></div>
+    </div>
+    <div class="kolkata">🕒 কলকাতা</div>
+    <div class="kTime" id="kTimeV">—</div>
+  </section>
+
+</div>
+
+<!-- Popup Calendar Modal -->
+<div class="modal" id="calModal">
+  <div class="box">
+    <div class="head">
+      <div>📅 সম্পূর্ণ পঞ্জিকা ক্যালেন্ডার</div>
+      <div class="close" id="closeCal">✖</div>
+    </div>
+    <div class="body" id="calBody">
+      <!-- এখানে পরে full calendar embed/engine বসবে -->
+      <p>ক্যালেন্ডার প্লেসহোল্ডার—এখানে সম্পূর্ণ পপ-আপ পঞ্জিকা রেন্ডার হবে।</p>
+    </div>
+  </div>
 </div>
 
 <script>
-function toBN(n){return n.replace(/[0-9]/g,d=>"০১২৩৪৫৬৭৮৯"[d]);}
-function bengaliClock(){
-  const now=new Date();
-  let h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
-  const ampm=h>=12?"PM":"AM";h=((h+11)%12)+1;
-  const pad=x=>x.toString().padStart(2,"0");
-  return `${toBN(pad(h))}:${toBN(pad(m))}:${toBN(pad(s))} <span class='ampm'>${ampm}</span>`;
+function stylizeTime(el, raw){
+  if(!raw){ el.textContent='—'; return; }
+  const parts=raw.trim().split(/\s+/); const ampm=parts.pop(); const hhmm=parts.join(' ');
+  el.innerHTML = `${hhmm} <span class="ampm">${ampm}</span>`;
+}
+function bnDigits(s){return String(s).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);}
+function liveClock(){
+  const now=new Date(); let h=now.getHours(), m=now.getMinutes(), s=now.getSeconds();
+  const ampm = h>=12 ? "PM":"AM"; h=((h+11)%12)+1;
+  const pad=x=>String(x).padStart(2,"0");
+  return `${bnDigits(pad(h))}:${bnDigits(pad(m))}:${bnDigits(pad(s))} <span class="ampm">${ampm}</span>`;
 }
 
 (async()=>{
-  const j=await fetch('/api/panchika').then(r=>r.json());
-  document.getElementById('tithi').textContent=j.tithi.current;
-  document.getElementById('tithiEnds').nextSibling.textContent=" "+j.tithi.ends_at;
-  document.getElementById('tithiNext').nextSibling.textContent=" "+j.tithi.next;
-  document.getElementById('paksha').textContent=j.paksha;
-  document.getElementById('nakshatra').textContent=j.nakshatra.current;
-  document.getElementById('nEnd').nextSibling.textContent=" "+j.nakshatra.ends_at;
-  document.getElementById('nNext').nextSibling.textContent=" "+j.nakshatra.next;
-  ['sunrise','sunset','moonrise','moonset'].forEach(id=>document.getElementById(id).textContent=j[id]);
-  document.getElementById('ekaName').textContent=j.ekadashi.name;
-  document.getElementById('ekaDate').textContent=j.ekadashi.date;
-  document.getElementById('ekaLeft').textContent=j.ekadashi.days_left+" দিন বাকি";
-  document.getElementById('festName').textContent="📣 "+j.festival.name;
-  document.getElementById('festDate').textContent=j.festival.date+" • "+j.festival.days_left+" দিন পরে";
-  document.getElementById('tj1').textContent=j.tide[0].time;
-  document.getElementById('tj2').textContent=j.tide[1].time;
-  document.getElementById('tv1').textContent=j.tide[2].time;
-  document.getElementById('tv2').textContent=j.tide[3].time;
-  function clock(){document.getElementById('kTime').innerHTML=bengaliClock();}
-  clock();setInterval(clock,1000);
+  try{
+    const j = await fetch('/api/panchika').then(r=>r.json());
+    // Panchika
+    document.getElementById('tithi').textContent = j.tithi?.name_bn || '—';
+    document.getElementById('tithiEnds').textContent = j.tithi?.ends_at || '—';
+    document.getElementById('tithiNext').textContent = j.tithi?.next_bn || '—';
+    document.getElementById('paksha').textContent = j.paksha || '—';
+    document.getElementById('nakshatra').textContent = j.nakshatra?.name_bn || '—';
+    document.getElementById('nEnd').textContent = j.nakshatra?.ends_at || '—';
+    document.getElementById('nNext').textContent = j.nakshatra?.next_bn || '—';
+
+    // Times
+    ['sunrise','sunset','moonrise','moonset'].forEach(id=>{
+      const el=document.getElementById(id);
+      stylizeTime(el, j[id]);
+    });
+
+    // Ekadashi
+    document.getElementById('ekaName').textContent = j.ekadashi?.name_bn || '—';
+    document.getElementById('ekaDate').textContent = j.ekadashi?.date || '—';
+    document.getElementById('ekaLeft').textContent = (j.ekadashi?.days_left ?? '—') + ' দিন বাকি';
+    document.getElementById('ekaParana').textContent = j.ekadashi?.parana_note || '';
+
+    // Upcoming
+    document.getElementById('festName').textContent = '📣 ' + (j.upcoming?.title || '—');
+    document.getElementById('festDate').textContent = (j.upcoming?.date || '—') + ' • ' + (j.upcoming?.days_left ?? '—') + ' দিন পরে';
+
+    // Tide
+    stylizeTime(document.getElementById('tj1'), j.tide?.high?.[0]);
+    stylizeTime(document.getElementById('tj2'), j.tide?.high?.[1]);
+    stylizeTime(document.getElementById('tv1'), j.tide?.low?.[0]);
+    stylizeTime(document.getElementById('tv2'), j.tide?.low?.[1]);
+
+    // Live Kolkata time on both tide cards
+    const tick=()=> {
+      const t = liveClock();
+      document.getElementById('kTimeJ').innerHTML = t;
+      document.getElementById('kTimeV').innerHTML = t;
+    };
+    tick(); setInterval(tick,1000);
+
+  }catch(e){ console.error(e); }
 })();
+
+// Popup calendar modal
+const modal = document.getElementById('calModal');
+document.getElementById('openCal').addEventListener('click',()=>{ modal.style.display='flex'; });
+document.getElementById('closeCal').addEventListener('click',()=>{ modal.style.display='none'; });
+modal.addEventListener('click',e=>{ if(e.target===modal) modal.style.display='none'; });
 </script>
 </body>
 </html>

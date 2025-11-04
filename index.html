@@ -194,7 +194,7 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
 // 🔄 Auto-refresh Panchika every 3 hours
 async function autoRefreshPanchika() {
   try {
-    const res = await fetch('/api/update');
+    const res = await fetch('https://madhabam-panjika.vercel.app/api/update');
     const data = await res.json();
 
     if (data.ok && data.data) {

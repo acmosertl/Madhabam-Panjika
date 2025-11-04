@@ -77,6 +77,26 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
     </div>
   </section>
 
+  <!-- 📅 পঞ্জিকা ক্যালেন্ডার কার্ড -->
+<section class="card trigger" id="openCal">
+  📅 সম্পূর্ণ হিন্দু পঞ্জিকা ক্যালেন্ডার দেখুন
+</section>
+
+<!-- 📅 Popup Calendar Modal -->
+<div class="modal" id="calModal">
+  <div class="box">
+    <div class="head">
+      <div>📅 সম্পূর্ণ পঞ্জিকা ক্যালেন্ডার</div>
+      <div class="close" id="closeCal">✖</div>
+    </div>
+    <div class="body" id="calBody">
+      <!-- 🔹 Placeholder: এখানে Full Calendar Embed হবে -->
+      <iframe src="https://www.drikpanchang.com/bengali/panchang.html"
+              style="width:100%;height:100%;border:0;border-radius:10px;"></iframe>
+    </div>
+  </div>
+</div>
+
   <!-- 🌼 একাদশী -->
   <section class="card eka">
     <div class="title">🌼 পরবর্তী একাদশী</div>
@@ -181,5 +201,16 @@ loadPanchika();
 // প্রতি ৩ ঘণ্টা পর রিফ্রেশ
 setInterval(loadPanchika,10800000);
 </script>
+
+  <script>
+  // 📅 Popup Calendar Modal Toggle
+  document.getElementById('openCal').onclick = () => {
+    document.getElementById('calModal').style.display = 'flex';
+  };
+  document.getElementById('closeCal').onclick = () => {
+    document.getElementById('calModal').style.display = 'none';
+  };
+  </script>
+  
 </body>
 </html>

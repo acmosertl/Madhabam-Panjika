@@ -46,9 +46,6 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
 .kolkata{color:#ffd54f;text-align:center;font-weight:900;margin-top:8px}
 .kTime{color:var(--glow);font-weight:900;font-size:18px}
 
-/* AM/PM smaller */
-.time .ampm{font-size:.82em;margin-left:4px}
-
 /* Popup calendar trigger + modal */
 .trigger{background:#FFF8E1;color:#7B1FA2;text-align:center;border-radius:12px;padding:12px;font-weight:900;cursor:pointer}
 .trigger:hover{filter:brightness(1.05)}
@@ -62,136 +59,62 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
 <body>
 <div class="wrap">
 
-  <!-- পঞ্জিকা -->
+  <!-- 🪔 পঞ্জিকা -->
   <section class="card">
     <div class="title">🪔 পঞ্জিকা</div>
     <div class="grid">
       <div class="pill">
         <div class="label">তিথি</div>
-        <div class="value" id="tithi">—</div>
-        <div class="sub"><b>শেষ:</b> <span id="tithiEnds">—</span> &nbsp; <b>•</b> &nbsp; <b>পরবর্তী:</b> <span id="tithiNext">—</span></div>
-      </div>
-      <div class="pill">
-        <div class="label">পক্ষ</div>
-        <div class="value" id="paksha">—</div>
+        <div class="value tithi">—</div>
       </div>
       <div class="pill">
         <div class="label">নক্ষত্র</div>
-        <div class="value" id="nakshatra">—</div>
-        <div class="sub"><b>শেষ:</b> <span id="nEnd">—</span> &nbsp; <b>•</b> &nbsp; <b>পরবর্তী:</b> <span id="nNext">—</span></div>
+        <div class="value nakshatra">—</div>
       </div>
     </div>
     <div class="grid grid-2" style="margin-top:10px">
-      <div class="pill"><div class="label">সূর্যোদয়</div><div class="value time" id="sunrise">—</div></div>
-      <div class="pill"><div class="label">সূর্যাস্ত</div><div class="value time" id="sunset">—</div></div>
-      <div class="pill"><div class="label">চন্দ্রোদয়</div><div class="value time" id="moonrise">—</div></div>
-      <div class="pill"><div class="label">চন্দ্রাস্ত</div><div class="value time" id="moonset">—</div></div>
+      <div class="pill"><div class="label">সূর্যোদয়</div><div class="value sunrise">—</div></div>
+      <div class="pill"><div class="label">সূর্যাস্ত</div><div class="value sunset">—</div></div>
+      <div class="pill"><div class="label">চন্দ্রোদয়</div><div class="value moonrise">—</div></div>
+      <div class="pill"><div class="label">চন্দ্রাস্ত</div><div class="value moonset">—</div></div>
     </div>
   </section>
-
-  <!-- Popup Calendar trigger -->
-  <section class="card trigger" id="openCal">📅 সম্পূর্ণ হিন্দু পঞ্জিকা ক্যালেন্ডার দেখুন</section>
 
   <!-- একাদশী -->
   <section class="card eka">
     <div class="title">🌼 পরবর্তী একাদশী</div>
-    <div class="eka-name" id="ekaName">—</div>
-    <div class="eka-meta" id="ekaDate">—</div>
-    <div class="eka-meta" id="ekaLeft">— দিন বাকি</div>
-    <div class="eka-meta" id="ekaParana">—</div>
+    <div class="eka-name ekadashi-name">—</div>
+    <div class="eka-meta ekadashi-date">—</div>
+    <div class="eka-meta ekadashi-days">— দিন বাকি</div>
   </section>
 
-  <!-- আসন্ন উৎসব -->
+  <!-- উৎসব -->
   <section class="card up">
-    <div class="name" id="festName">📣 —</div>
-    <div class="meta" id="festDate">—</div>
+    <div class="name fest-name">📣 —</div>
+    <div class="meta fest-date">—</div>
   </section>
 
-  <!-- Tide → দুটি ফুল-উইডথ কার্ড -->
+  <!-- 🌊 Tide -->
   <section class="tideBlock">
     <div class="tbTitle">🌊 আজকের জোয়ার</div>
     <div class="tideGrid">
-      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ১</div><div class="tVal time" id="tj1">—</div></div>
-      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ২</div><div class="tVal time" id="tj2">—</div></div>
+      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ১</div><div class="tVal tj1">—</div></div>
+      <div class="tCell"><div class="tLab">উচ্চ জোয়ার ২</div><div class="tVal tj2">—</div></div>
     </div>
-    <div class="kolkata">🕒 কলকাতা</div>
-    <div class="kTime" id="kTimeJ">—</div>
   </section>
 
   <section class="tideBlock">
     <div class="tbTitle">🌊 আজকের ভাটা</div>
     <div class="tideGrid">
-      <div class="tCell"><div class="tLab">নিম্ন ভাটা ১</div><div class="tVal time" id="tv1">—</div></div>
-      <div class="tCell"><div class="tLab">নিম্ন ভাটা ২</div><div class="tVal time" id="tv2">—</div></div>
+      <div class="tCell"><div class="tLab">নিম্ন ভাটা ১</div><div class="tVal tv1">—</div></div>
+      <div class="tCell"><div class="tLab">নিম্ন ভাটা ২</div><div class="tVal tv2">—</div></div>
     </div>
-    <div class="kolkata">🕒 কলকাতা</div>
-    <div class="kTime" id="kTimeV">—</div>
   </section>
 
 </div>
 
-<!-- Popup Calendar Modal -->
-<div class="modal" id="calModal">
-  <div class="box">
-    <div class="head">
-      <div>📅 সম্পূর্ণ পঞ্জিকা ক্যালেন্ডার</div>
-      <div class="close" id="closeCal">✖</div>
-    </div>
-    <div class="body" id="calBody">
-      <!-- এখানে পরে full calendar embed/engine বসবে -->
-      <p>ক্যালেন্ডার প্লেসহোল্ডার—এখানে সম্পূর্ণ পপ-আপ পঞ্জিকা রেন্ডার হবে।</p>
-    </div>
-  </div>
-</div>
-
-<!-- ⬇ এই স্ক্রিপ্ট ব্লকটা পুরনো index.html-এর শেষে </body> ট্যাগের আগে বসাও -->
+<!-- ✅ Panchika Auto-Engine -->
 <script>
-(async function(){
-  try{
-    const res = await fetch('/data/panchika.json?'+Date.now());
-    const d = await res.json();
-
-    // Panchika
-    set('tithi', d.tithi);
-    set('nakshatra', d.nakshatra);
-    set('sunrise', d.sunrise);
-    set('sunset', d.sunset);
-    set('moonrise', d.moonrise);
-    set('moonset', d.moonset);
-
-    // Ekadashi
-    if (d.ekadashi){
-      set('ekaName', d.ekadashi.name);
-      set('ekaMeta', `${formatDate(d.ekadashi.date)} • ${d.ekadashi.days_left} দিন বাকি`);
-    }
-
-    // Festival
-    if (d.events && d.events.length){
-      set('festName', d.events[0].name);
-      set('festMeta', `${formatDate(d.events[0].date)} • ${d.events[0].days_left} দিন পরে`);
-    }
-
-    // Tide
-    const T = d.tide || [];
-    set('th1', T[0]?.time || '—');
-    set('th2', T[1]?.time || '—');
-    set('tl1', T[2]?.time || '—');
-    set('tl2', T[3]?.time || '—');
-  }catch(e){console.error(e);}
-  
-  function set(id,v){ const el=document.getElementById(id); if(el) el.textContent=v??'—'; }
-  function formatDate(str){
-    try{
-      const d=new Date(str+'T00:00:00');
-      return new Intl.DateTimeFormat('bn-BD',{day:'2-digit',month:'short',year:'numeric'}).format(d);
-    }catch{return str;}
-  }
-})();
-</script>
-<!-- ⬆ এখানেই শেষ -->
-
-  <script>
-// 🔄 Auto-refresh Panchika every 3 hours
 async function autoRefreshPanchika() {
   try {
     const res = await fetch('https://madhabam-panjika.vercel.app/api/update');
@@ -199,33 +122,30 @@ async function autoRefreshPanchika() {
 
     if (data.ok && data.data) {
       const p = data.data;
-      document.querySelector('.tithi').textContent = p.tithi || '-';
-      document.querySelector('.nakshatra').textContent = p.nakshatra || '-';
-      document.querySelector('.sunrise').textContent = p.sunrise;
-      document.querySelector('.sunset').textContent = p.sunset;
-      document.querySelector('.moonrise').textContent = p.moonrise;
-      document.querySelector('.moonset').textContent = p.moonset;
+      const s = (sel,v)=>{const el=document.querySelector(sel);if(el)el.textContent=v||'—';};
 
-      // একাদশী তথ্য আপডেট
-      document.querySelector('.ekadashi-name').textContent = p.ekadashi.name;
-      document.querySelector('.ekadashi-date').textContent = p.ekadashi.date;
-      document.querySelector('.ekadashi-days').textContent = `${p.ekadashi.days_left} দিন বাকি`;
+      s('.tithi',p.tithi);
+      s('.nakshatra',p.nakshatra);
+      s('.sunrise',p.sunrise);
+      s('.sunset',p.sunset);
+      s('.moonrise',p.moonrise);
+      s('.moonset',p.moonset);
 
-      // সর্বশেষ আপডেট সময়
-      document.querySelector('.last-updated').textContent = 
-        `আপডেট হয়েছে: ${new Date(p.updated).toLocaleTimeString('bn-BD')}`;
+      if(p.ekadashi){
+        s('.ekadashi-name',p.ekadashi.name);
+        s('.ekadashi-date',p.ekadashi.date);
+        s('.ekadashi-days',`${p.ekadashi.days_left} দিন বাকি`);
+      }
+
+      console.log('✅ Panchika updated',p);
     }
   } catch (err) {
     console.error('Panchika update failed:', err);
   }
 }
 
-// প্রথমবার লোডের সময় কল করো
 autoRefreshPanchika();
-
-// প্রতি ৩ ঘন্টা অন্তর রিফ্রেশ করো (3 × 60 × 60 × 1000 ms)
-setInterval(autoRefreshPanchika, 10800000);
-  </script>
-  
+setInterval(autoRefreshPanchika,10800000);
+</script>
 </body>
 </html>

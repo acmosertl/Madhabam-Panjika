@@ -1,6 +1,5 @@
 {
   "version": 3,
-  "framework": null,
   "functions": {
     "api/panchika.js": {
       "runtime": "nodejs20.x"
@@ -9,7 +8,7 @@
   "routes": [
     {
       "src": "/api/panchika",
-      "dest": "/api/panchika.js"
+      "dest": "api/panchika.js"
     }
   ]
 }

@@ -1,13 +1,11 @@
 {
-  "version": 3,
-  "framework": null,
-  "buildCommand": "echo 'Building Madhabam Panjika API...'",
-  "outputDirectory": ".",
-  "functions": {
-    "api/panchika.js": {
-      "runtime": "nodejs20.x"
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/panchika.js",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/panchika",

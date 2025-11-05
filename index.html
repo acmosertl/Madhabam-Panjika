@@ -126,7 +126,7 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
   <!-- 🌊 ভাটা -->
   <section class="tideBlock">
     <div class="tbTitle">🌊 আজকের ভাটা</div>
-    <div class="tideGrid">
+    <div class="tideGrid"
       <div class="tCell"><div class="tLab">নিম্ন ভাটা ১</div><div class="tVal" id="tv1">—</div></div>
       <div class="tCell"><div class="tLab">নিম্ন ভাটা ২</div><div class="tVal" id="tv2">—</div></div>
     </div>
@@ -136,81 +136,82 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
 
 </div>
 
-<!-- 🔄 Panchika Auto Engine -->
 <script>
-async function loadPanchika(){
-  try{
-    const res = await fetch('https://madhabam-panjika.vercel.app/api/update?ts=' + Date.now());
+async function loadPanchika() {
+  try {
+    const res = await fetch('/api/panchika');
     const j = await res.json();
-    if(!j.ok || !j.data){ console.warn("❌ No Panchika Data"); return; }
+    if (!j.ok) return;
+    const d = j.data;
 
-    const p = j.data;
-    const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v||'—'; };
-    const fmt = t => {
-      if(!t) return '—';
-      let [h,m] = t.split(':').map(Number);
-      const ampm = h>=12?'PM':'AM';
-      h = h%12||12;
-      return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ampm}`;
-    };
-
-    // 🪔 Panchika base
-    set('tithi', p.tithi);
-    set('paksha', p.paksha);
-    set('nakshatra', p.nakshatra);
-    set('sunrise', fmt(p.sunrise));
-    set('sunset', fmt(p.sunset));
-    set('moonrise', fmt(p.moonrise));
-    set('moonset', fmt(p.moonset));
+    // 🌞 Panchika Basics
+    set("tithi", d.tithi);
+    set("paksha", d.paksha);
+    set("nakshatra", d.nakshatra);
+    set("sunrise", d.sunrise);
+    set("sunset", d.sunset);
+    set("moonrise", d.moonrise);
+    set("moonset", d.moonset);
 
     // 🌼 Ekadashi
-    if(p.ekadashi){
-      set('ekaName', p.ekadashi.name);
-      set('ekaDate', new Date(p.ekadashi.date).toLocaleDateString('bn-BD'));
-      set('ekaLeft', `${p.ekadashi.days_left} দিন বাকি`);
-      set('ekaParana', p.ekadashi.parana || '—');
+    if (d.ekadashi) {
+      set("ekaName", d.ekadashi.name);
+      set("ekaDate", formatDate(d.ekadashi.date));
+      set("ekaLeft", `${d.ekadashi.days_left} দিন বাকি`);
     }
 
-    // 📣 Festival
-    if(p.events && p.events.length){
-      set('festName', p.events[0].name);
-      set('festDate', `${new Date(p.events[0].date).toLocaleDateString('bn-BD')} • ${p.events[0].days_left} দিন পরে`);
+    // 📣 Upcoming Event
+    if (d.events && d.events.length) {
+      set("festName", d.events[0].name);
+      set("festDate", `${formatDate(d.events[0].date)} • ${d.events[0].days_left} দিন পরে`);
     }
 
     // 🌊 Tide
-    if(p.tide && p.tide.length>=4){
-      set('tj1', fmt(p.tide[0].time));
-      set('tj2', fmt(p.tide[1].time));
-      set('tv1', fmt(p.tide[2].time));
-      set('tv2', fmt(p.tide[3].time));
+    const tide = d.tide || [];
+    if (tide[0]) {
+      set("tj1", tide[0].high1);
+      set("tj2", tide[0].high2);
+    }
+    if (tide[1]) {
+      set("tv1", tide[1].low1);
+      set("tv2", tide[1].low2);
     }
 
-    // 🕒 Kolkata time
-    const now = new Date();
-    const kol = now.toLocaleTimeString('bn-BD',{hour12:true});
-    set('kTimeJ', kol);
-    set('kTimeV', kol);
-    console.log("✅ Panchika Updated:", p);
+    // 🕒 Local Time (Kolkata)
+    updateTime();
+    setInterval(updateTime, 1000);
+
+  } catch (err) {
+    console.error("Panchika Engine Error:", err);
   }
-  catch(err){ console.error("⚠️ Panchika Load Failed:", err); }
 }
 
-// প্রথমবার লোডের সময়
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val || "—";
+}
+
+function formatDate(str) {
+  const d = new Date(str + "T00:00:00");
+  return d.toLocaleDateString("bn-BD", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function updateTime() {
+  const now = new Date();
+  const time = now.toLocaleTimeString("en-US", {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+  document.querySelectorAll('.kTime').forEach(e => e.textContent = time);
+}
+
+// 🚀 Initial load + Auto refresh every 3 hours
 loadPanchika();
-
-// প্রতি ৩ ঘণ্টা পর রিফ্রেশ
-setInterval(loadPanchika,10800000);
+setInterval(loadPanchika, 10800000);
 </script>
-
-  <script>
-  // 📅 Popup Calendar Modal Toggle
-  document.getElementById('openCal').onclick = () => {
-    document.getElementById('calModal').style.display = 'flex';
-  };
-  document.getElementById('closeCal').onclick = () => {
-    document.getElementById('calModal').style.display = 'none';
-  };
-  </script>
+      
   
 </body>
 </html>

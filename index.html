@@ -91,8 +91,7 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
     </div>
     <div class="body" id="calBody">
       <!-- 🔹 Placeholder: এখানে Full Calendar Embed হবে -->
-      <iframe src="https://www.drikpanchang.com/bengali/panchang.html"
-              style="width:100%;height:100%;border:0;border-radius:10px;"></iframe>
+      
     </div>
   </div>
 </div>
@@ -135,48 +134,53 @@ body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-ui,san
   </section>
 
 </div>
-
+  
 <script>
 (async function(){
-  try{
-    const url = '/api/update?mode=drik&tz=Asia/Kolkata'; // চাইলে mode=surya টেস্ট কর
-    const r = await fetch(url + '&_=' + Date.now());
-    const { ok, data } = await r.json();
-    if(!ok || !data) return;
+  try {
+    // 🔄 নতুন পঞ্জিকা ইঞ্জিন থেকে লাইভ ডেটা নাও
+    const res = await fetch('/api/update');
+    const d = await res.json();
+    const p = d.data || d; // fallback
 
-    const S = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent = v ?? '—'; };
+    // 🌞 সূর্যোদয়, সূর্যাস্ত, চন্দ্রোদয়, চন্দ্রাস্ত
+    document.getElementById('sunrise').textContent = p.sunrise || '—';
+    document.getElementById('sunset').textContent = p.sunset || '—';
+    document.getElementById('moonrise').textContent = p.moonrise || '—';
+    document.getElementById('moonset').textContent = p.moonset || '—';
 
-    // পঞ্জিকা
-    S('tithi', data.tithi);
-    S('tithiNext', data.tithi_next);
-    S('tithiEnds', data.tithi_ends_at);
-    S('paksha', data.paksha);
-    S('nakshatra', data.nakshatra);
-    S('nNext', data.nakshatra_next);
-    S('nEnd', data.nakshatra_ends_at);
-    S('sunrise', data.sunrise);
-    S('sunset', data.sunset);
-    S('moonrise', data.moonrise);
-    S('moonset', data.moonset);
+    // 🕉️ তিথি ও নক্ষত্র
+    document.getElementById('tithi').textContent = p.tithi || '—';
+    document.getElementById('tithiEnds').textContent = p.tithi_end || '—';
+    document.getElementById('tithiNext').textContent = p.tithi_next || '—';
+    document.getElementById('nakshatra').textContent = p.nakshatra || '—';
+    document.getElementById('nEnd').textContent = p.nak_end || '—';
+    document.getElementById('nNext').textContent = p.nak_next || '—';
 
-    // একাদশী + পারণ (আজ একাদশী হলে today:true)
-    if (data.paran){
-      const p = data.paran;
-      S('ekaParana', `পারণ: ${p.paran_date}, ${p.paran_start} – ${p.paran_end}`);
-    }
+    // 🌼 একাদশী
+    document.getElementById('ekaName').textContent = p.ekadashi?.name || '—';
+    document.getElementById('ekaDate').textContent = p.ekadashi?.date || '—';
+    document.getElementById('ekaLeft').textContent = `${p.ekadashi?.days_left || '—'} দিন বাকি`;
+    document.getElementById('ekaParana').textContent =
+      `পারণ: ${p.ekadashi?.paran_start || '-'} – ${p.ekadashi?.paran_end || '-'}`;
 
-    // Tide (high1, high2, low1, low2)
-    if (data.tide){
-      const t = data.tide;
-      if (t.high) { S('tj1', t.high[0]); S('tj2', t.high[1]); }
-      if (t.low)  { S('tv1', t.low[0]);  S('tv2', t.low[1]);  }
-      // Kolkata label/clock তুমি আগেই দিয়েছ — 그대로 থাকবে
-    }
-  }catch(e){ console.error(e); }
+    // 📅 আসন্ন উৎসব
+    document.getElementById('festName').textContent = p.events?.[0]?.name || '—';
+    document.getElementById('festDate').textContent =
+      `${p.events?.[0]?.date || ''} • ${p.events?.[0]?.days_left || '-'} দিন পরে`;
+
+    // 🌊 জোয়ার ভাটা
+    document.getElementById('tj1').textContent = p.tide?.high1 || '—';
+    document.getElementById('tj2').textContent = p.tide?.high2 || '—';
+    document.getElementById('tv1').textContent = p.tide?.low1 || '—';
+    document.getElementById('tv2').textContent = p.tide?.low2 || '—';
+    document.getElementById('kTimeJ').textContent = p.tide?.city || 'কলকাতা';
+    document.getElementById('kTimeV').textContent = p.tide?.time || '—';
+
+  } catch(e) {
+    console.error('Panchika Load Error:', e);
+  }
 })();
-
-// প্রতি ৩ ঘন্টা অন্তর রিফ্রেশ
-setInterval(()=>location.reload(), 10800000);
 </script>
 
 </body>

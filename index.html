@@ -36,6 +36,16 @@ html,body{margin:0;background:var(--bg);font-family:"Noto Sans Bengali",system-u
 .knob.right{transform:translateX(100%);}
 .toggleHint{font-size:12px;color:#6a5617;font-weight:700}
 
+  /* --- Toggle highlight visibility patch --- */
+.toggleBar[data-mode="surya"] .seg:first-child {
+  color:#ffffff !important;
+  text-shadow:0 1px 1px rgba(0,0,0,0.3);
+}
+.toggleBar[data-mode="drik"] .seg:last-child {
+  color:#ffffff !important;
+  text-shadow:0 1px 1px rgba(0,0,0,0.3);
+}
+
 /* এজ-টু-এজ + টাইট স্পেসিং */
 .pill{background:var(--pink);border-radius:10px;padding:10px;margin:6px 0}
 .label{color:var(--label);font-weight:900;font-size:14px;margin-bottom:2px}
@@ -187,11 +197,39 @@ function solarRiseSetUTC(J0,lat,lon,h0,mode){
   const off = riseSetFineOffset(lat,mode)/60;
   return {riseUTC: raw.riseUTC!=null ? raw.riseUTC+off : null, setUTC:  raw.setUTC !=null ? raw.setUTC +off : null};
 }
-function lunarRiseSetUTC(J0,lat,lon,h0,mode){
-  const raw=lunarRiseSetUTC_raw(J0,lat,lon,h0,mode);
-  const off = riseSetFineOffset(lat,mode)/60;
-  return {riseUTC: raw.riseUTC!=null ? raw.riseUTC+off : null, setUTC:  raw.setUTC!=null ? raw.setUTC +off : null};
-}
+/* ===== Hybrid lunarRiseSetUTC (Open-Meteo API + fallback) ===== */
+async function lunarRiseSetUTC(J0, lat, lon, h0, mode) {
+  try {
+    // Date for Open-Meteo (UTC format)
+    const toISODate = (J) => {
+      const ms = (J - 2440587.5) * 86400000;
+      const d = new Date(ms);
+      return d.toISOString().split('T')[0];
+    };
+    const date = toISODate(J0);
+    const api = `https://api.open-meteo.com/v1/astronomy?latitude=${lat}&longitude=${lon}&daily=moonrise,moonset&timezone=UTC&start_date=${date}&end_date=${date}`;
+    const r = await fetch(api, { cache: "no-store" });
+    if (r.ok) {
+      const j = await r.json();
+      if (j?.daily?.moonrise?.[0]) {
+        const mr = new Date(j.daily.moonrise[0]);
+        const ms = new Date(j.daily.moonset[0]);
+        const mrUTC = mr.getUTCHours() + mr.getUTCMinutes()/60 + mr.getUTCSeconds()/3600;
+        const msUTC = ms.getUTCHours() + ms.getUTCMinutes()/60 + ms.getUTCSeconds()/3600;
+        return { riseUTC: mrUTC, setUTC: msUTC };
+      }
+    }
+  } catch (err) {
+    console.warn("Open-Meteo lunar API unavailable:", err);
+  }
+
+  // fallback → local calculation
+  const raw = lunarRiseSetUTC_raw(J0, lat, lon, h0, mode);
+  const off = riseSetFineOffset(lat, mode)/60;
+  return {
+    riseUTC: raw.riseUTC != null ? raw.riseUTC + off : null,
+    setUTC:  raw.setUTC  != null ? raw.setUTC  + off : null
+  }
 
 /* ===== Tithi & Nakshatra ===== */
 function tithiName(n){

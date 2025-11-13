@@ -42,6 +42,36 @@
 .valueLarge{font-weight:900;font-size:28px;color:var(--ink);margin-bottom:6px}
 .subline{font-size:14px;color:#222}
 
+/* PAKSHA BADGE FIX — blogger sidebar safe */
+.paksha{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:6px 12px;
+  background:#ffe7a1;
+  border-radius:999px;
+  font-weight:800;
+  font-size:15px;
+  max-width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  box-sizing:border-box;
+}
+
+.paksha .emoji{
+  font-size:18px;
+  line-height:1;
+}
+
+.paksha .label{
+  font-size:14px;
+  font-weight:700;
+  color:#444;
+}
+
+  
 /* timeColumn */
 .timeCol{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .timeItem{background:var(--pink1);border-radius:10px;padding:10px}
@@ -395,7 +425,12 @@
         </div>
 
         <div class="pill">
-          <span class="paksha">${tNow.paksha === "শুক্লপক্ষ" ? "🌑 → 🌕 (শুক্লপক্ষ)" : "🌕 → 🌑 (কৃষ্ণপক্ষ)"}</span>
+          <span class="paksha">
+  <span class="emoji">${tNow.paksha === "শুক্লপক্ষ" ? "🌑" : "🌕"}</span>
+  <span class="arrow"> → </span>
+  <span class="emoji">${tNow.paksha === "শুক্লপক্ষ" ? "🌕" : "🌑"}</span>
+  <span class="label"> (${tNow.paksha})</span>
+</span>
           <div class="labelLarge">তিথি</div>
           <div class="valueLarge">${tithiName(tNow.num)}</div>
           <div class="subline"><b>শেষ:</b> ${fmtDayTime(new Date(), tEndLocal)} · <b>পরবর্তী:</b> <span style="font-weight:900;color:#0b66c2">${tNext}</span></div>

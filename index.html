@@ -85,6 +85,11 @@
   color:#3a2a00;
 }
 
+  .emojiBox {
+  filter: contrast(1.6) brightness(0.85) saturate(1.4);
+  }
+
+  
 /* timeColumn */
 .timeCol{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .timeItem{background:var(--pink1);border-radius:10px;padding:10px}
@@ -422,8 +427,9 @@
         <div class="toggleWrap">
           <div class="toggleNames" aria-hidden="true">
             <div>সূর্যসিদ্ধান্ত</div>
-<div>দৃক (Govt)</div>
+            <div>দৃক (Govt)</div>
           </div>
+          
           <div class="toggleRail" id="toggleRail">
             <div class="knob ${MODE==='drik' ? 'right' : ''}" id="toggleKnob" role="button" aria-label="toggle panchika mode"></div>
           </div>
